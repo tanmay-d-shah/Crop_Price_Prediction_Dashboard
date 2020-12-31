@@ -55,6 +55,7 @@ for(var item in commodity_dict  ){
  // console.log(commodity_array);
  function train()
  {
+    
      var wpi=data.map(function(v){return v[3]});
      //console.log(data);
      var data3 = data.map(function(v){return v.splice(0,3) });
