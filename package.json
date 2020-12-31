@@ -1,0 +1,31 @@
+{
+  "name": "crop-price-prediction-dash",
+  "version": "1.0.0",
+  "description": "Crop Price Prediction Dashboard",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TanmayDineshkumarShah/Crop_Price_Prediction_Dashboard.git"
+  },
+  "keywords": [
+    "nodejs",
+    "reactjs",
+    "express"
+  ],
+  "author": "Tanmay Dineshkumar Shah",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TanmayDineshkumarShah/Crop_Price_Prediction_Dashboard/issues"
+  },
+  "homepage": "https://github.com/TanmayDineshkumarShah/Crop_Price_Prediction_Dashboard#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "ml-cart": "^2.0.2",
+    "nodemon": "^2.0.6"
+  }
+}
