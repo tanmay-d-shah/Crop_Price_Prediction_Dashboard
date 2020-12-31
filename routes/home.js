@@ -14,7 +14,7 @@ var data2=data.splice(-1,1);//remove bottom row
 
 
 var wpi=data.map(function(v){return v[3]});
-//console.log(data);
+console.log(data);
 var data3 = data.map(function(v){return v.splice(0,3) });
 
 
