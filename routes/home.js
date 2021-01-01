@@ -72,7 +72,7 @@ async function train(predictors, wpi) {
 
 async function getPredictedValue(regressor, date) {
 
-   
+
 
     const estimations = await regressor.predict([[date[0], date[1], date[2]]]);
 
@@ -80,7 +80,7 @@ async function getPredictedValue(regressor, date) {
     return estimations;
 }
 
-async function TopFiveWinners() {
+async function ExtremumCrops() {
     var current_month = new Date().getMonth();
 
 
@@ -98,9 +98,11 @@ async function TopFiveWinners() {
     for (var i = 0; i < commodity_array.length; i++) {
 
         var cropData = commodity_array[i];
-      
+
+
+
         var wpi = cropData[1].map(function (row) { return row[3] });
-       
+
         var predictors = cropData[1].map(function (v) { return v.splice(0, 3) });
 
 
@@ -119,22 +121,32 @@ async function TopFiveWinners() {
         current_month_prediction.push(current_predict_num);
         prev_month_prediction.push(prev_predict_num);
 
-        changeMap.set(cropData[0], ((current_predict_num - prev_predict_num) * 100 / prev_predict_num).toFixed(2));
+        changeMap.set(i, ((current_predict_num - prev_predict_num) * 100 / prev_predict_num).toFixed(2));
 
 
     }
 
-    const sortedMap = new Map([...changeMap.entries()].sort((a, b) => b[1] - a[1]));
-
+    const topSortedMap = new Map([...changeMap.entries()].sort((a, b) => b[1] - a[1]));
+    const bottomSortedMap = new Map([...changeMap.entries()].sort((a, b) => a[1] - b[1]));
     topSend = [];
+    bottomSend = [];
+    mapSize = changeMap.size - 1;
     for (var i = 0; i < 1; i++) {
-        var row = Array.from(sortedMap)[i];
+        var topRow = Array.from(topSortedMap)[i];
+        var bottomRow = Array.from(topSortedMap)[mapSize - i];
 
-        var name = row[0];
-        var perc = row[1];
-        topSend.push([name, Math.round(current_predict_num * base[name] / 100, 2), perc]);
+        var topName = commodity_array[topRow[0]][0];
+
+        var topPerc = topRow[1];
+        var bottomName = commodity_array[bottomRow[0]][0];
+
+        var bottomPerc = bottomRow[1];
+        topSend.push([topName, Math.round(current_month_prediction[topRow[0]] * base[topName] / 100, 2), topPerc]);
+        bottomSend.push([bottomName, Math.round(current_month_prediction[bottomRow[0]] * base[bottomName] / 100, 2), bottomPerc]);
     }
-    return topSend;
+
+    var extremum = [topSend, bottomSend];
+    return extremum;
 
 }
 
@@ -142,12 +154,15 @@ async function TopFiveWinners() {
 
 
 
-router.get("/",  async function (req, res) {
+router.get("/", async function (req, res) {
 
-    
-    top5Win= await TopFiveWinners();
+
+
+    var extremum = await ExtremumCrops();
     //var bottom5Lose = TopFiveLosers();
-    console.log(top5Win);
+    console.log("Top " + extremum[0]);
+    console.log("Bottom " + extremum[1]);
+
 
     res.render("home.ejs");
 });
