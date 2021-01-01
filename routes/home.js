@@ -127,7 +127,7 @@ async function ExtremumCrops() {
     }
 
     const topSortedMap = new Map([...changeMap.entries()].sort((a, b) => b[1] - a[1]));
-    const bottomSortedMap = new Map([...changeMap.entries()].sort((a, b) => a[1] - b[1]));
+   
     topSend = [];
     bottomSend = [];
     mapSize = changeMap.size - 1;
