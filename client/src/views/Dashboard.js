@@ -15,12 +15,12 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useEffect, useState } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // react plugin used to create charts
 import { Line, Bar } from "react-chartjs-2";
-
+import axios from 'axios';
 // reactstrap components
 import {
   Button,
@@ -50,11 +50,77 @@ import {
   chartExample4,
 } from "variables/charts.js";
 
+
+
+
+// function createGainerRow(rowData) {
+//   return (
+//     <tr>
+//       <td>{rowData[0]}</td>
+//       <td>{rowData[1]}</td>
+
+//       <td className="text-center">
+//         <Button className="btn-icon" color="success" size="sm">
+//           <i className="fa fa-arrow-up"></i>
+//         </Button>
+//       </td>
+
+
+
+//     </tr>);
+// }
+
+
+
+
 function Dashboard(props) {
+  const [Data, setData] = useState([[[]],[[]]]);
+
   const [bigChartData, setbigChartData] = React.useState("data1");
   const setBgChartData = (name) => {
     setbigChartData(name);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios(`/home`);
+      setData(result.data);
+      console.log(Data);
+    };
+    fetchData();
+
+  }, [])
+
+
+  function createGainerRowData(gainerData) {
+    return (
+      <tr>
+        <td>{gainerData[0]}</td>
+        <td>{gainerData[1]}</td>
+
+        <td className="text-center">
+          <Button className="btn-icon" color="success" size="sm">
+            <i className="fa fa-arrow-up"></i>
+          </Button>
+        </td>
+      </tr>
+    )
+  }
+  function createLoserRowData(loserData) {
+    return (
+      <tr>
+        <td>{loserData[0]}</td>
+        <td>{loserData[1]}</td>
+
+        <td className="text-center">
+          <Button className="btn-icon" color="danger" size="sm">
+            <i className="fa fa-arrow-down"></i>
+          </Button>
+        </td>
+      </tr>
+    )
+  }
+
   return (
     <>
       <div className="content">
@@ -78,36 +144,8 @@ function Dashboard(props) {
                     </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                      <td>Arhar</td>
-                      <td>2345</td>
-
-                      <td className="text-center">
-                        <Button className="btn-icon" color="success" size="sm">
-                          <i className="fa fa-arrow-up"></i>
-                        </Button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Bajra</td>
-                      <td>1176</td>
-
-                      <td className="text-center">
-                        <Button className="btn-icon" color="success" size="sm">
-                          <i className="fa fa-arrow-up"></i>
-                        </Button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Paddy</td>
-                      <td>3245</td>
-
-                      <td className="text-center">
-                        <Button className="btn-icon" color="success" size="sm">
-                          <i className="fa fa-arrow-up"></i>
-                        </Button>
-                      </td>
-                    </tr>
+                    
+                    { Data[0].map(createGainerRowData)  }
                   </tbody>
                 </Table>
               </CardBody>
@@ -130,42 +168,37 @@ function Dashboard(props) {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Udad</td>
-                      <td>1176</td>
-
-                      <td className="text-center">
-                        <Button className="btn-icon" color="danger" size="sm">
-                          <i className="fa fa-arrow-down"></i>
-                        </Button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Wheat</td>
-                      <td>1854</td>
-
-                      <td className="text-center">
-                        <Button className="btn-icon" color="danger" size="sm">
-                          <i className="fa fa-arrow-down"></i>
-                        </Button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Barley</td>
-                      <td>2011</td>
-
-                      <td className="text-center">
-                        <Button className="btn-icon" color="danger" size="sm">
-                          <i className="fa fa-arrow-down"></i>
-                        </Button>
-                      </td>
-                    </tr>
+                  { Data[1].map(createLoserRowData)  }
                   </tbody>
                 </Table>
               </CardBody>
             </Card>
           </Col>
         </Row>
+        <Row>
+          <Col xs="12">
+            <Card className="card-chart">
+              <CardHeader>
+                <Row>
+                  <Col className="text-left" sm="6">
+                    <h5 className="card-category">Total Prices</h5>
+                    <CardTitle tag="h2">Per Quintal</CardTitle>
+                  </Col>
+                  
+                </Row>
+              </CardHeader>
+              <CardBody>
+                <div className="chart-area">
+                  <Line
+                    data={chartExample1[bigChartData]}
+                    options={chartExample1.options}
+                  />
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+        <Row></Row>
       </div>
     </>
   );

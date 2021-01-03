@@ -3,14 +3,57 @@ var router = express.Router();
 var mlcart = require("ml-cart");
 var DTRegression = mlcart.DecisionTreeRegression;
 var fs = require('fs');
+const cors=require('cors');
 var arharPath = "./public/data/Arhar.csv";
 var bajraPath = "./public/data/Bajra.csv";
+var barleyPath = "./public/data/Barley.csv";
+var copraPath = "./public/data/Copra.csv";
+var cottonPath = "./public/data/Cotton.csv";
+var gramPath = "./public/data/Gram.csv";
+var groundnutPath = "./public/data/Groundnut.csv";
+var jowarPath = "./public/data/Jowar.csv";
+var jutePath = "./public/data/Jute.csv";
+var maizePath = "./public/data/Maize.csv";
+var masoorPath = "./public/data/Masoor.csv";
+var moongPath = "./public/data/Moong.csv";
+var nigerPath = "./public/data/Niger.csv";
+var paddyPath = "./public/data/Paddy.csv";
+var ragiPath = "./public/data/Ragi.csv";
+var rapePath = "./public/data/Rape.csv";
+var safflowerPath = "./public/data/Safflower.csv";
+var sesamumPath = "./public/data/Sesamum.csv";
+var soyabeanPath = "./public/data/Soyabean.csv";
+var sugarcanePath = "./public/data/Sugarcane.csv";
+var sunflowerPath = "./public/data/Sunflower.csv";
+var uradPath = "./public/data/Urad.csv";
+var wheatPath = "./public/data/Wheat.csv";
 var commodity_dict = {
     //  WheatItem : Wheat,
     Bajra: bajraPath,
-    Arhar: arharPath
+    Arhar: arharPath,
+    Barley : barleyPath,
+    Copra : copraPath,
+    Cotton : cottonPath,
+    Gram : gramPath,
+    Groundnut : groundnutPath,
+    Jowar : jowarPath,
+    Jute : jutePath,
+    Maize : maizePath,
+    Masoor : masoorPath,
+    Moong: moongPath,
+    Niger : nigerPath,
+    Paddy: paddyPath,
+    Ragi : ragiPath,
+    Rape : rapePath,
+    Safflower : safflowerPath,
+    Sesamum : sesamumPath,
+    Soyabean : soyabeanPath,
+    Sugarcane : sugarcanePath,
+    Sunflower : sunflowerPath,
+    Urad : uradPath,
+    Wheat : wheatPath
 }
-var commodity_array = [];
+
 
 annual_rainfall = [29, 21, 37.5, 30.7, 52.6, 150, 299, 251.7, 179.2, 70.5, 39.8, 10.9]
 base = {
@@ -42,23 +85,7 @@ base = {
 
 
 
-for (var item in commodity_dict) {
 
-
-
-    var data = fs.readFileSync(commodity_dict[item])
-        .toString() // convert Buffer to string
-        .split('\n') // split string to lines
-        .map(e => e.trim()) // remove white spaces for each line
-        .map(e => e.split(',').map(e => parseFloat(e.trim()))); // split each line to array
-    var data1 = data.splice(0, 1);//remove top row
-    var data2 = data.splice(-1, 1);//remove bottom row
-    commodity_array.push([item, data]);
-
-
-
-
-}
 
 
 async function train(predictors, wpi) {
@@ -81,8 +108,28 @@ async function getPredictedValue(regressor, date) {
 }
 
 async function ExtremumCrops() {
-    var current_month = new Date().getMonth();
+    var commodity_array = [];
 
+    for (var item in commodity_dict) {
+
+        
+        
+        var data = fs.readFileSync(commodity_dict[item])
+            .toString() // convert Buffer to string
+            .split('\n') // split string to lines
+            .map(e => e.trim()) // remove white spaces for each line
+            .map(e => e.split(',').map(e => parseFloat(e.trim()))); // split each line to array
+        var data1 = data.splice(0, 1);//remove top row
+        var data2 = data.splice(-1, 1);//remove bottom row
+        commodity_array.push([item, data]);
+        
+    
+    
+    
+    }
+    
+    var current_month = new Date().getMonth();
+    
 
     var current_year = new Date().getFullYear();
     var current_rainfall = annual_rainfall[current_month];
@@ -131,7 +178,7 @@ async function ExtremumCrops() {
     topSend = [];
     bottomSend = [];
     mapSize = changeMap.size - 1;
-    for (var i = 0; i < 1; i++) {
+    for (var i = 0; i < 5; i++) {
         var topRow = Array.from(topSortedMap)[i];
         var bottomRow = Array.from(topSortedMap)[mapSize - i];
 
@@ -154,17 +201,13 @@ async function ExtremumCrops() {
 
 
 
-router.get("/", async function (req, res) {
-
-
-
-    var extremum = await ExtremumCrops();
-    //var bottom5Lose = TopFiveLosers();
-    console.log("Top " + extremum[0]);
-    console.log("Bottom " + extremum[1]);
-
-
-    res.render("home.ejs");
+router.get("/home",cors(),async  function (req, res) {
+    console.log("sent data");
+    var data=await ExtremumCrops();
+    console.log(data);
+    res.send(data);
+    
+    
 });
 
 

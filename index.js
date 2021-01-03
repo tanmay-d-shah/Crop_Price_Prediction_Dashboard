@@ -12,8 +12,8 @@ app.use(bodyParser.urlencoded({
 }));
 
 var home=require('./routes/home');
-
-app.use('/',home);
+app.use("/",home);
+//app.use("/home",home);
 
 let port=process.env.PORT;
 
