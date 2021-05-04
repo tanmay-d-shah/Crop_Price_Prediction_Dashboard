@@ -27,6 +27,12 @@ var sugarcanePath = "./public/data/Sugarcane.csv";
 var sunflowerPath = "./public/data/Sunflower.csv";
 var uradPath = "./public/data/Urad.csv";
 var wheatPath = "./public/data/Wheat.csv";
+
+var crop_info_data=fs.readFileSync("./public/crops_info.json");
+var crop_info=JSON.parse(crop_info_data);
+
+
+
 var commodity_dict = {
     //  WheatItem : Wheat,
     Bajra: bajraPath,
@@ -83,11 +89,6 @@ base = {
 
 }
 
-
-
-
-
-
 async function train(predictors, wpi) {
     const reg = new DTRegression();
     await reg.train(predictors, wpi);
@@ -96,41 +97,42 @@ async function train(predictors, wpi) {
 
 }
 
-
 async function getPredictedValue(regressor, date) {
 
-
-
     const estimations = await regressor.predict([[date[0], date[1], date[2]]]);
-
 
     return estimations;
 }
 
-async function ExtremumCrops() {
-    var commodity_array = [];
+async function formCommodityArray(commodity_dict){
+        
+    var commodity_array=[];
 
     for (var item in commodity_dict) {
-
-        
-        
+        console.log(item);
         var data = fs.readFileSync(commodity_dict[item])
+
             .toString() // convert Buffer to string
             .split('\n') // split string to lines
             .map(e => e.trim()) // remove white spaces for each line
             .map(e => e.split(',').map(e => parseFloat(e.trim()))); // split each line to array
         var data1 = data.splice(0, 1);//remove top row
         var data2 = data.splice(-1, 1);//remove bottom row
-        commodity_array.push([item, data]);
-        
-    
-    
-    
+        commodity_array.push([item, data]);    
+
     }
-    
-    var current_month = new Date().getMonth();
+    return commodity_array;
+
+}
+
+
+async function ExtremumCrops() {
     
 
+    var commodity_array= await formCommodityArray(commodity_dict);
+    
+    
+    var current_month = new Date().getMonth();
     var current_year = new Date().getFullYear();
     var current_rainfall = annual_rainfall[current_month];
     var prev_month = (current_month + 11) % 12;
@@ -140,23 +142,15 @@ async function ExtremumCrops() {
     var prev_month_prediction = [];
     var changeMap = new Map();
 
-
-
     for (var i = 0; i < commodity_array.length; i++) {
 
         var cropData = commodity_array[i];
-
-
 
         var wpi = cropData[1].map(function (row) { return row[3] });
 
         var predictors = cropData[1].map(function (v) { return v.splice(0, 3) });
 
-
-
         var regressor = await train(predictors, wpi);
-
-
 
         var current_predict = await getPredictedValue(regressor, [current_month, current_year, current_rainfall]);
         var prev_predict = await getPredictedValue(regressor, [(prev_month), current_year, prev_rainfall]);
@@ -169,8 +163,6 @@ async function ExtremumCrops() {
         prev_month_prediction.push(prev_predict_num);
 
         changeMap.set(i, ((current_predict_num - prev_predict_num) * 100 / prev_predict_num).toFixed(2));
-
-
     }
 
     const topSortedMap = new Map([...changeMap.entries()].sort((a, b) => b[1] - a[1]));
@@ -197,9 +189,64 @@ async function ExtremumCrops() {
 
 }
 
+async function TweleveMonthForecast(name){
+    
+    var current_month = new Date().getMonth();
+    var current_year = new Date().getFullYear();
+    var current_rainfall = annual_rainfall[current_month];
+    var commodity_array= await formCommodityArray(commodity_dict);
+    var cropData;
+    for(var i=0;i<commodity_array.length;i++){
+        
+        var cropName=commodity_array[i][0];
+        if(cropName.toLowerCase()===name){
+            cropData=commodity_array[i];
+            break;
+        }
+    }
 
+    var month_with_year=[];
+    for(var i=1;i<12;i++){
+        if(current_month +i <=11){
+            month_with_year.push((current_month+i),(current_year),annual_rainfall[current_month+i]);
+        }
+        else{
+            month_with_year.push((current_month+i-11),current_year+1,annual_rainfall[current_month+i-11]);
+        }
+    }
+    var max_index=0;
+    var min_index=0;
+    var max_value=0;
+    var min_value=9999;
+    var wpis=[];
+    var change=[];
+    var wpi = cropData[1].map(function (row) { return row[3] });
 
+    var predictors = cropData[1].map(function (v) { return v.splice(0, 3) });
 
+    var regressor = await train(predictors, wpi);
+
+    var current_wpi = await getPredictedValue(regressor, [current_month, current_year, current_rainfall]);
+    
+    for(var i=0;i<month_with_year.length;i++){
+        var current_predict=await getPredictedValue(regressor,month_with_year[i]);
+        if(current_predict>max_value){
+            max_value=current_predict;
+            max_index=i;
+        }
+        if(current_predict<min_value){
+            min_value=current_predict;
+            min_index=i;
+        }
+        wpis.push(current_predict);
+        change.push((current_predict-current_wpi)*100/current_wpi);
+    }
+
+    
+
+    
+
+}
 
 router.get("/home",cors(),async  function (req, res) {
     console.log("sent data");
@@ -210,5 +257,28 @@ router.get("/home",cors(),async  function (req, res) {
     
 });
 
+router.get("/commodity:crop_name",cors(),async function(req,res){
+    
+    var crop=req.params.crop_name;
+    max_crop,min_crop,forecast_crop_values= TweleveMonthForecast(crop);
+    prev_crop_values=TweleveMonthPrevious(crop);
+    current_price=CurrentMonth(crop);
+    crop_data=crop_info[crop];
+    
+    var crop_profile={
+        "name":crop,
+        "max_crop":max_crop,
+        "min_crop":min_crop,
+        "forecast_values":forecast_crop_values,
+        "previous_values":prev_crop_values,
+        "current_price":current_price,
+        "image_url":crop_data[0],
+        "prime_loc":crop_data[1],
+        "type_c":crop_data[2],
+        "export":crop_data[3]
+    }
+    res.send(crop_profile);
+    
+});
 
 module.exports = router;

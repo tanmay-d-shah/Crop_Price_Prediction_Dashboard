@@ -26,6 +26,9 @@ import {
   Button,
   ButtonGroup,
   Card,
+  CardImg,
+  CardImgOverlay,
+  CardText,
   CardHeader,
   CardBody,
   CardTitle,
@@ -74,7 +77,7 @@ import {
 
 
 function Dashboard(props) {
-  const [Data, setData] = useState([[[]],[[]]]);
+  const [Data, setData] = useState([[[]], [[]]]);
 
   const [bigChartData, setbigChartData] = React.useState("data1");
   const setBgChartData = (name) => {
@@ -144,8 +147,8 @@ function Dashboard(props) {
                     </tr>
                   </thead>
                   <tbody>
-                    
-                    { Data[0].map(createGainerRowData)  }
+
+                    {Data[0].map(createGainerRowData)}
                   </tbody>
                 </Table>
               </CardBody>
@@ -168,37 +171,92 @@ function Dashboard(props) {
                     </tr>
                   </thead>
                   <tbody>
-                  { Data[1].map(createLoserRowData)  }
+                    {Data[1].map(createLoserRowData)}
                   </tbody>
                 </Table>
               </CardBody>
             </Card>
           </Col>
         </Row>
+
+        Essential Crops
         <Row>
-          <Col xs="12">
-            <Card className="card-chart">
-              <CardHeader>
-                <Row>
-                  <Col className="text-left" sm="6">
-                    <h5 className="card-category">Total Prices</h5>
-                    <CardTitle tag="h2">Per Quintal</CardTitle>
-                  </Col>
-                  
-                </Row>
-              </CardHeader>
+          <Col xs="6" md="3">
+            <Card className="bg-dark text-white text-center">
+              <CardImg top src={require("assets/img/rice_svg.png").default} alt="..." />
               <CardBody>
-                <div className="chart-area">
-                  <Line
-                    data={chartExample1[bigChartData]}
-                    options={chartExample1.options}
-                  />
-                </div>
+                <CardText>RICE</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+
+          <Col xs="6" md="3">
+            <Card className="bg-dark text-white text-center">
+              <CardImg top src={require("assets/img/wheat_svg.png").default} alt="..." />
+              <CardBody>
+                <CardText>WHEAT</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+
+          <Col xs="6" md="3">
+            <Card className="bg-dark text-white text-center">
+              <CardImg top src={require("assets/img/millet_svg.png").default} alt="..." />
+              <CardBody>
+                <CardText>MILLET</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+
+
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center">
+              <CardImg top src={require("assets/img/maize_svg.png").default} alt="..." />
+              <CardBody>
+                <CardText>MAIZE</CardText>
               </CardBody>
             </Card>
           </Col>
         </Row>
-        <Row></Row>
+
+        <Row>
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center">
+              <CardImg top src={require("assets/img/sugarcane_svg.jpg").default} alt="..." />
+              <CardBody>
+                <CardText>SUGARCANE</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center">
+              <CardImg top src={require("assets/img/groundnut_svg.png").default} alt="..." />
+              <CardBody>
+                <CardText>GROUNDNUT</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center">
+              <CardImg top src={require("assets/img/cotton_svg.png").default} alt="..." />
+              <CardBody>
+                <CardText>COTTON</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+
+
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center">
+              <CardImg top src={require("assets/img/tea_svg.jpg").default} alt="..." />
+              <CardBody>
+                <CardText>TEA</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
       </div>
     </>
   );
