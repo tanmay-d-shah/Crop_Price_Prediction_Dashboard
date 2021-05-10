@@ -16,6 +16,7 @@
 
 */
 import React, { useEffect, useState } from "react";
+import {useHistory} from "react-router-dom";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // react plugin used to create charts
@@ -56,33 +57,18 @@ import {
 
 
 
-// function createGainerRow(rowData) {
-//   return (
-//     <tr>
-//       <td>{rowData[0]}</td>
-//       <td>{rowData[1]}</td>
 
-//       <td className="text-center">
-//         <Button className="btn-icon" color="success" size="sm">
-//           <i className="fa fa-arrow-up"></i>
-//         </Button>
-//       </td>
-
-
-
-//     </tr>);
-// }
 
 
 
 
 function Dashboard(props) {
   const [Data, setData] = useState([[[]], [[]]]);
-
-  const [bigChartData, setbigChartData] = React.useState("data1");
-  const setBgChartData = (name) => {
-    setbigChartData(name);
-  };
+  let history=useHistory();
+  // const [bigChartData, setbigChartData] = React.useState("data1");
+  // const setBgChartData = (name) => {
+  //   setbigChartData(name);
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -102,6 +88,7 @@ function Dashboard(props) {
         <td>{gainerData[1]}</td>
 
         <td className="text-center">
+        {gainerData[2]} % &nbsp;
           <Button className="btn-icon" color="success" size="sm">
             <i className="fa fa-arrow-up"></i>
           </Button>
@@ -116,6 +103,7 @@ function Dashboard(props) {
         <td>{loserData[1]}</td>
 
         <td className="text-center">
+        {loserData[2]} % &nbsp;
           <Button className="btn-icon" color="danger" size="sm">
             <i className="fa fa-arrow-down"></i>
           </Button>
@@ -179,10 +167,12 @@ function Dashboard(props) {
           </Col>
         </Row>
 
-        Essential Crops
+        
         <Row>
+        
           <Col xs="6" md="3">
-            <Card className="bg-dark text-white text-center">
+            
+            <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/paddy")}>
               <CardImg top src={require("assets/img/rice_svg.png").default} alt="..." />
               <CardBody>
                 <CardText>RICE</CardText>
@@ -191,7 +181,7 @@ function Dashboard(props) {
           </Col>
 
           <Col xs="6" md="3">
-            <Card className="bg-dark text-white text-center">
+            <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/wheat")}>
               <CardImg top src={require("assets/img/wheat_svg.png").default} alt="..." />
               <CardBody>
                 <CardText>WHEAT</CardText>
@@ -200,7 +190,7 @@ function Dashboard(props) {
           </Col>
 
           <Col xs="6" md="3">
-            <Card className="bg-dark text-white text-center">
+            <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/millet")}>
               <CardImg top src={require("assets/img/millet_svg.png").default} alt="..." />
               <CardBody>
                 <CardText>MILLET</CardText>
@@ -210,7 +200,7 @@ function Dashboard(props) {
 
 
           <Col xs="6" md="3">
-          <Card className="bg-dark text-white text-center">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/maize")}>
               <CardImg top src={require("assets/img/maize_svg.png").default} alt="..." />
               <CardBody>
                 <CardText>MAIZE</CardText>
@@ -221,7 +211,7 @@ function Dashboard(props) {
 
         <Row>
           <Col xs="6" md="3">
-          <Card className="bg-dark text-white text-center">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/sugarcane")}>
               <CardImg top src={require("assets/img/sugarcane_svg.jpg").default} alt="..." />
               <CardBody>
                 <CardText>SUGARCANE</CardText>
@@ -230,7 +220,7 @@ function Dashboard(props) {
           </Col>
 
           <Col xs="6" md="3">
-          <Card className="bg-dark text-white text-center">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/groundnut")}>
               <CardImg top src={require("assets/img/groundnut_svg.png").default} alt="..." />
               <CardBody>
                 <CardText>GROUNDNUT</CardText>
@@ -239,7 +229,7 @@ function Dashboard(props) {
           </Col>
 
           <Col xs="6" md="3">
-          <Card className="bg-dark text-white text-center">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/cotton")}>
               <CardImg top src={require("assets/img/cotton_svg.png").default} alt="..." />
               <CardBody>
                 <CardText>COTTON</CardText>
@@ -249,7 +239,7 @@ function Dashboard(props) {
 
 
           <Col xs="6" md="3">
-          <Card className="bg-dark text-white text-center">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/tea")}>
               <CardImg top src={require("assets/img/tea_svg.jpg").default} alt="..." />
               <CardBody>
                 <CardText>TEA</CardText>

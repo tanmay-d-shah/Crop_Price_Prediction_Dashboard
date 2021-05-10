@@ -109,7 +109,7 @@ async function formCommodityArray(commodity_dict){
     var commodity_array=[];
 
     for (var item in commodity_dict) {
-        console.log(item);
+        //console.log(item);
         var data = fs.readFileSync(commodity_dict[item])
 
             .toString() // convert Buffer to string
@@ -164,7 +164,7 @@ async function ExtremumCrops() {
 
         changeMap.set(i, ((current_predict_num - prev_predict_num) * 100 / prev_predict_num).toFixed(2));
     }
-
+    
     const topSortedMap = new Map([...changeMap.entries()].sort((a, b) => b[1] - a[1]));
    
     topSend = [];
@@ -172,6 +172,7 @@ async function ExtremumCrops() {
     mapSize = changeMap.size - 1;
     for (var i = 0; i < 5; i++) {
         var topRow = Array.from(topSortedMap)[i];
+        
         var bottomRow = Array.from(topSortedMap)[mapSize - i];
 
         var topName = commodity_array[topRow[0]][0];
@@ -189,6 +190,8 @@ async function ExtremumCrops() {
 
 }
 
+
+
 async function TweleveMonthForecast(name){
     
     var current_month = new Date().getMonth();
@@ -196,22 +199,26 @@ async function TweleveMonthForecast(name){
     var current_rainfall = annual_rainfall[current_month];
     var commodity_array= await formCommodityArray(commodity_dict);
     var cropData;
+    var cropName;
+    //console.log(name);
     for(var i=0;i<commodity_array.length;i++){
         
-        var cropName=commodity_array[i][0];
+        cropName=commodity_array[i][0];
+        //console.log(cropName.toLowerCase());
         if(cropName.toLowerCase()===name){
+            
             cropData=commodity_array[i];
             break;
         }
     }
-
+    //console.log(current_month);
     var month_with_year=[];
-    for(var i=1;i<12;i++){
+    for(var i=1;i<13;i++){
         if(current_month +i <=11){
-            month_with_year.push((current_month+i),(current_year),annual_rainfall[current_month+i]);
+            month_with_year.push([(current_month+i),(current_year),annual_rainfall[current_month+i]]);
         }
         else{
-            month_with_year.push((current_month+i-11),current_year+1,annual_rainfall[current_month+i-11]);
+            month_with_year.push([(current_month+i-12),current_year+1,annual_rainfall[current_month+i-12]]);
         }
     }
     var max_index=0;
@@ -220,6 +227,7 @@ async function TweleveMonthForecast(name){
     var min_value=9999;
     var wpis=[];
     var change=[];
+    //console.log(cropData);
     var wpi = cropData[1].map(function (row) { return row[3] });
 
     var predictors = cropData[1].map(function (v) { return v.splice(0, 3) });
@@ -241,7 +249,35 @@ async function TweleveMonthForecast(name){
         wpis.push(current_predict);
         change.push((current_predict-current_wpi)*100/current_wpi);
     }
+    var crop_price=[];
+    var crop_label=[];
+    var crop_change=[];
+    var months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    var crop_profile=[];
+    //console.log(month_with_year);
+    for(var i=0;i<wpis.length;i++){
+        var m=month_with_year[i][0];
+        var y=month_with_year[i][1];
+        var x=[months[m],y];
+        crop_label.push(x);
+        crop_price.push(Math.round((wpis[i]*base[cropName])/100,2));
+        crop_change.push(change[i].toFixed(2));
+        crop_profile.push([x,Math.round((wpis[i]*base[cropName])/100,2),change[i].toFixed(2)])
+        
+        //console.log(m,y);        
+    }
+    console.log(crop_profile);
+    max_month=month_with_year[max_index][0];
+    //console.log(max_month);
+    max_year=month_with_year[max_index][1];
+    min_month=month_with_year[min_index][0];
+    min_year=month_with_year[min_index][1];
 
+    var max_crop=[months[max_month],max_year,max_value];
+    var min_crop=[months[min_month],min_year,min_value];
+    var current_price=(base[cropName]*current_wpi)/100;
+
+    return [crop_price,crop_label,crop_change,max_crop,min_crop,current_price,crop_profile];
     
 
     
@@ -257,26 +293,31 @@ router.get("/home",cors(),async  function (req, res) {
     
 });
 
-router.get("/commodity:crop_name",cors(),async function(req,res){
+router.get("/commodity/:crop_name",cors(),async function(req,res){
     
     var crop=req.params.crop_name;
-    max_crop,min_crop,forecast_crop_values= TweleveMonthForecast(crop);
-    prev_crop_values=TweleveMonthPrevious(crop);
-    current_price=CurrentMonth(crop);
+    
+    var commodity_details=await TweleveMonthForecast(crop);
+    
+    // prev_crop_values=TweleveMonthPrevious(crop);
+    current_price=commodity_details[5];
     crop_data=crop_info[crop];
     
     var crop_profile={
         "name":crop,
-        "max_crop":max_crop,
-        "min_crop":min_crop,
-        "forecast_values":forecast_crop_values,
-        "previous_values":prev_crop_values,
-        "current_price":current_price,
+        "max_crop":commodity_details[3],
+        "min_crop":commodity_details[4],
+        "forecast_changes":commodity_details[2],
+        "forecast_labels":commodity_details[1],
+        "forecast_prices":commodity_details[0],
+        "current_price":current_price.toFixed(2),
         "image_url":crop_data[0],
         "prime_loc":crop_data[1],
         "type_c":crop_data[2],
-        "export":crop_data[3]
+        "export":crop_data[3],
+        "crop_profile":commodity_details[6]
     }
+    console.log(crop_profile);
     res.send(crop_profile);
     
 });

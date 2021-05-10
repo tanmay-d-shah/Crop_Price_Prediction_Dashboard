@@ -26,10 +26,12 @@ import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
+
 import routes from "routes.js";
 
 import logo from "assets/img/react-logo.png";
 import { BackgroundColorContext } from "contexts/BackgroundColorContext";
+import CropDetails from "views/CropDetails";
 
 var ps;
 
@@ -39,27 +41,27 @@ function Admin(props) {
   const [sidebarOpened, setsidebarOpened] = React.useState(
     document.documentElement.className.indexOf("nav-open") !== -1
   );
-  React.useEffect(() => {
-    if (navigator.platform.indexOf("Win") > -1) {
-      document.documentElement.className += " perfect-scrollbar-on";
-      document.documentElement.classList.remove("perfect-scrollbar-off");
-      ps = new PerfectScrollbar(mainPanelRef.current, {
-        suppressScrollX: true,
-      });
-      let tables = document.querySelectorAll(".table-responsive");
-      for (let i = 0; i < tables.length; i++) {
-        ps = new PerfectScrollbar(tables[i]);
-      }
-    }
-    // Specify how to clean up after this effect:
-    return function cleanup() {
-      if (navigator.platform.indexOf("Win") > -1) {
-        ps.destroy();
-        document.documentElement.classList.add("perfect-scrollbar-off");
-        document.documentElement.classList.remove("perfect-scrollbar-on");
-      }
-    };
-  });
+  // React.useEffect(() => {
+  //   if (navigator.platform.indexOf("Win") > -1) {
+  //     document.documentElement.className += " perfect-scrollbar-on";
+  //     document.documentElement.classList.remove("perfect-scrollbar-off");
+  //     ps = new PerfectScrollbar(mainPanelRef.current, {
+  //       suppressScrollX: true,
+  //     });
+  //     let tables = document.querySelectorAll(".table-responsive");
+  //     for (let i = 0; i < tables.length; i++) {
+  //       ps = new PerfectScrollbar(tables[i]);
+  //     }
+  //   }
+  //   // Specify how to clean up after this effect:
+  //   return function cleanup() {
+  //     if (navigator.platform.indexOf("Win") > -1) {
+  //       ps.destroy();
+  //       document.documentElement.classList.add("perfect-scrollbar-off");
+  //       document.documentElement.classList.remove("perfect-scrollbar-on");
+  //     }
+  //   };
+  // });
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
       let tables = document.querySelectorAll(".table-responsive");
@@ -73,6 +75,8 @@ function Admin(props) {
       mainPanelRef.current.scrollTop = 0;
     }
   }, [location]);
+
+
   // this function opens and closes the sidebar on small devices
   const toggleSidebar = () => {
     document.documentElement.classList.toggle("nav-open");
@@ -81,14 +85,14 @@ function Admin(props) {
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
       if (prop.layout === "/admin") {
-        
+
         return (
-          
+
           <Route
             path={prop.layout + prop.path}
             component={prop.component}
             key={key}
-            
+
           />
         );
       } else {
@@ -113,12 +117,16 @@ function Admin(props) {
             />
             <div className="main-panel" ref={mainPanelRef} data={color}>
               <AdminNavbar
-                brandText="Crop Prediction Dashboard"
+                brandText="Crop Price Prediction Dashboard"
                 toggleSidebar={toggleSidebar}
                 sidebarOpened={sidebarOpened}
               />
               <Switch>
                 {getRoutes(routes)}
+                <Route
+                  path="/admin/cropDetails/:cropname"
+                  component={CropDetails}
+                />
                 <Redirect from="*" to="/admin/dashboard" />
               </Switch>
               {

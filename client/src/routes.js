@@ -19,6 +19,7 @@ import Dashboard from "views/Dashboard.js";
 import Icons from "views/Icons.js";
 import Map from "views/Map.js";
 import Notifications from "views/Notifications.js";
+import CropDetails from "views/CropDetails.js";
 import Rtl from "views/Rtl.js";
 import TableList from "views/TableList.js";
 import Typography from "views/Typography.js";
@@ -57,6 +58,7 @@ var routes = [
     component: Notifications,
     layout: "/admin",
   },
+
   
 ];
 export default routes;

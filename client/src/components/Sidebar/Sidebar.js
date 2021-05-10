@@ -30,6 +30,7 @@ import {
   BackgroundColorContext,
   backgroundColors,
 } from "contexts/BackgroundColorContext";
+import { isConstructorDeclaration } from "typescript";
 
 var ps;
 
@@ -121,6 +122,7 @@ function Sidebar(props) {
             <Nav>
               {routes.map((prop, key) => {
                 if (prop.redirect) return null;
+                {console.log(prop);}
                 return (
                   <li
                     className={
@@ -135,7 +137,7 @@ function Sidebar(props) {
                       onClick={props.toggleSidebar}
                     >
                       <i className={prop.icon} />
-                      <p>{rtlActive ? prop.rtlName : prop.name}</p>
+                      <p>{prop.name}</p>
                     </NavLink>
                   </li>
                 );
