@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Line, Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 // reactstrap components
 import { Card, CardHeader, CardBody, Row, Col, Button, ButtonGroup, CardTitle, Table, CardImg } from "reactstrap";
 
@@ -136,8 +136,9 @@ function CropDetails() {
 
                 <td className="text-center">
                     {row[2]} % &nbsp;
-              <Button className="btn-icon" color="success" size="sm">
-                        <i className="fa fa-arrow-up"></i>
+
+              <Button className="btn-icon" color={row[2]>=0? "success":"danger"} size="sm">
+                        <i className={row[2]>=0? "fa fa-arrow-up":"fa fa-arrow-down"}></i>
                     </Button>
                 </td>
             </tr>

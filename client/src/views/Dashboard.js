@@ -17,58 +17,25 @@
 */
 import React, { useEffect, useState } from "react";
 import {useHistory} from "react-router-dom";
-// nodejs library that concatenates classes
-import classNames from "classnames";
-// react plugin used to create charts
-import { Line, Bar } from "react-chartjs-2";
 import axios from 'axios';
 // reactstrap components
 import {
   Button,
-  ButtonGroup,
   Card,
   CardImg,
-  CardImgOverlay,
   CardText,
   CardHeader,
   CardBody,
   CardTitle,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  Label,
-  FormGroup,
-  Input,
   Table,
   Row,
   Col,
-  UncontrolledTooltip,
+ 
 } from "reactstrap";
-
-// core components
-import {
-  chartExample1,
-  chartExample2,
-  chartExample3,
-  chartExample4,
-} from "variables/charts.js";
-
-
-
-
-
-
-
-
 
 function Dashboard(props) {
   const [Data, setData] = useState([[[]], [[]]]);
   let history=useHistory();
-  // const [bigChartData, setbigChartData] = React.useState("data1");
-  // const setBgChartData = (name) => {
-  //   setbigChartData(name);
-  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -190,10 +157,10 @@ function Dashboard(props) {
           </Col>
 
           <Col xs="6" md="3">
-            <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/millet")}>
-              <CardImg top src={require("assets/img/millet_svg.png").default} alt="..." />
+            <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/bajra")}>
+              <CardImg top src={require("assets/img/bajra_svg.jpg").default} alt="..." />
               <CardBody>
-                <CardText>MILLET</CardText>
+                <CardText>BAJRA</CardText>
               </CardBody>
             </Card>
           </Col>
@@ -239,10 +206,128 @@ function Dashboard(props) {
 
 
           <Col xs="6" md="3">
-          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/tea")}>
-              <CardImg top src={require("assets/img/tea_svg.jpg").default} alt="..." />
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/jowar")}>
+              <CardImg top src={require("assets/img/jowar_svg.jpg").default} alt="..." />
               <CardBody>
-                <CardText>TEA</CardText>
+                <CardText>JOWAR</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/barley")}>
+              <CardImg top src={require("assets/img/barley_svg.jpg").default} alt="..." />
+              <CardBody>
+                <CardText>Barley</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/copra")}>
+              <CardImg top src={require("assets/img/copra_svg.jpg").default} alt="..." />
+              <CardBody>
+                <CardText>Copra</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/masoor")}>
+              <CardImg top src={require("assets/img/masoor_svg.jpg").default} alt="..." />
+              <CardBody>
+                <CardText>Masoor</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+
+
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/gram")}>
+              <CardImg top src={require("assets/img/gram_svg.png").default} alt="..." />
+              <CardBody>
+                <CardText>GRAM</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/arhar")}>
+              <CardImg top src={require("assets/img/arhar_svg.jpg").default} alt="..." />
+              <CardBody>
+                <CardText>ARHAR</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/sesamum")}>
+              <CardImg top src={require("assets/img/sesamum_svg.jpg").default} alt="..." />
+              <CardBody>
+                <CardText>SESAMUM</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/moong")}>
+              <CardImg top src={require("assets/img/moong_svg.jpg").default} alt="..." />
+              <CardBody>
+                <CardText>MOONG</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+
+
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/niger")}>
+              <CardImg top src={require("assets/img/niger_svg.jpg").default} alt="..." />
+              <CardBody>
+                <CardText>NIGER</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+
+
+        <Row>
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/rape")}>
+              <CardImg top src={require("assets/img/rape_svg.jpg").default} alt="..." />
+              <CardBody>
+                <CardText>RAPE</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/sunflower")}>
+              <CardImg top src={require("assets/img/sunflower_svg.png").default} alt="..." />
+              <CardBody>
+                <CardText>SUNFLOWER</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/jute")}>
+              <CardImg top src={require("assets/img/jute_svg.jpg").default} alt="..." />
+              <CardBody>
+                <CardText>JUTE</CardText>
+              </CardBody>
+            </Card>
+          </Col>
+
+
+          <Col xs="6" md="3">
+          <Card className="bg-dark text-white text-center" onClick={() => history.push("/admin/cropDetails/soyabean")}>
+              <CardImg top src={require("assets/img/soyabean_svg.jpg").default} alt="..." />
+              <CardBody>
+                <CardText>SOYABEAN</CardText>
               </CardBody>
             </Card>
           </Col>

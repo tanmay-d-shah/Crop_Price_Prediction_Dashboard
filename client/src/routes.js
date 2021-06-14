@@ -16,14 +16,8 @@
 
 */
 import Dashboard from "views/Dashboard.js";
-import Icons from "views/Icons.js";
-import Map from "views/Map.js";
-import Notifications from "views/Notifications.js";
-import CropDetails from "views/CropDetails.js";
-import Rtl from "views/Rtl.js";
-import TableList from "views/TableList.js";
-import Typography from "views/Typography.js";
-import UserProfile from "views/UserProfile.js";
+
+
 
 var routes = [
   {
@@ -34,30 +28,7 @@ var routes = [
     component: Dashboard,
     layout: "/admin",
   },
-  {
-    path: "/icons",
-    name: "Crop Analysis",
-    rtlName: "الرموز",
-    icon: "tim-icons icon-align-center",
-    component: Icons,
-    layout: "/admin",
-  },
-  {
-    path: "/map",
-    name: "Live Price Prediction",
-    rtlName: "خرائط",
-    icon: "tim-icons icon-pin",
-    component: Map,
-    layout: "/admin",
-  },
-  {
-    path: "/notifications",
-    name: "Notifications",
-    rtlName: "إخطارات",
-    icon: "tim-icons icon-bell-55",
-    component: Notifications,
-    layout: "/admin",
-  },
+  
 
   
 ];
