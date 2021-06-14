@@ -5,6 +5,8 @@ Credits to https://www.creative-tim.com/product/black-dashboard-react for Dashbo
 
 Live Deployment: https://crop-price-prediction-dash.herokuapp.com
 
+The data has been taken from data.gov.in between the intervals of April 2012 to December 2018
+
 To run this project:
 1. go to main directory and run ```npm install```
 2. after installing, run ```node index.js```
