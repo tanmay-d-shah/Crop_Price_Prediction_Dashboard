@@ -249,6 +249,8 @@ async function TweleveMonthForecast(name){
         wpis.push(current_predict);
         change.push((current_predict-current_wpi)*100/current_wpi);
     }
+    max_value=Math.round((max_value*base[cropName])/100,2);
+    min_value=Math.round((min_value*base[cropName])/100,2);
     var crop_price=[];
     var crop_label=[];
     var crop_change=[];
@@ -278,9 +280,6 @@ async function TweleveMonthForecast(name){
     var current_price=(base[cropName]*current_wpi)/100;
 
     return [crop_price,crop_label,crop_change,max_crop,min_crop,current_price,crop_profile];
-    
-
-    
 
 }
 

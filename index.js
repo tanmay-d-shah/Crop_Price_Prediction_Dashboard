@@ -3,7 +3,8 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const fs = require("fs");
 const app=express();
-
+const cors=require('cors');
+const path = require("path");
 app.use(express.static("public"));
 
 app.set('view engine', 'ejs');
@@ -13,8 +14,12 @@ app.use(bodyParser.urlencoded({
 
 var home=require('./routes/home');
 app.use("/",home);
+app.use("/admin",express.static(path.join(__dirname, 'client/build')));
 //app.use("/home",home);
 
+app.get("/",function(req,res){
+  res.redirect("/admin")
+})
 let port=process.env.PORT;
 
 if(port== null ||port==""){

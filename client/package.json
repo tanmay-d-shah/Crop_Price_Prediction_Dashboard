@@ -2,10 +2,11 @@
   "name": "black-dashboard-react",
   "version": "1.2.0",
   "private": true,
-  "homepage": "http://localhost:8000",
-  "proxy":"http://localhost:8000",
+  "homepage": "http://localhost:8000/admin",
+  "proxy": "http://localhost:8000/",
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.1",
+    "axios": "^0.21.1",
     "bootstrap": "4.5.3",
     "chart.js": "2.9.4",
     "classnames": "2.2.6",
